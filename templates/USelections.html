@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>US Election Trends</title>
+</head>
+<body>
+    <h3>Top 10 #hashtags of US elections</h3>
+    <ol>
+        {% for hashtag in hashtags %}
+            <li>{{ hashtag }}</li>
+        {% endfor %}
+    </ol>
+</body>
+</html>
