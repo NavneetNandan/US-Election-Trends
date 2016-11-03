@@ -3,9 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>US Election Trends</title>
+    <script type='text/javascript' src='https://www.gstatic.com/charts/loader.js'></script>
+    <script type='text/javascript'>
+     google.charts.load('upcoming', {'packages': ['geochart']});
+     google.charts.setOnLoadCallback(drawMarkersMap);
+
+      function drawMarkersMap() {
+      var data = google.visualization.arrayToDataTable([
+        ['City',   'Value'],
+
+        {% for place_of_tweet in places_of_tweets %}
+            ['{{ place_of_tweet }}',{{ places_of_tweets[place_of_tweet] }}],
+        {% endfor %}
+      ]);
+
+      var options = {
+        displayMode: 'markers',
+        colorAxis: {colors: ['blue', 'red']}
+      };
+
+      var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
+      chart.draw(data, options);
+    };
+    </script>
 </head>
 <body>
-    <h3>Top 10 #hashtags of US elections</h3>
+    <h2>Top 10 #hashtags of US elections</h2>
     <ol>
         {% for hashtag in hashtags %}
             <li>{{ hashtag }}</li>
@@ -13,5 +36,7 @@
     </ol>
     <h4>Percent of original tweet is {{ original_tweet_percent }}%</h4>
     <h4>Percent of retweeted tweet is {{ retweeted_tweet_percent }}%</h4>
+    <h2>Location of tweets related to USelections</h2>
+    <div id="chart_div" style="width: 900px; height: 500px;"></div>
 </body>
 </html>
