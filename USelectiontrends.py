@@ -1,10 +1,10 @@
 from flask import Flask, render_template
 from pymongo import MongoClient
-import matplotlib.pyplot as plt
 import pandas as pd
 
 app = Flask(__name__)
 app.debug = True
+
 
 @app.route('/')
 def hello_world():
@@ -14,21 +14,41 @@ def hello_world():
     tweets = db['tweets'].find()
     counted_retweeted = 0
     counted_original = 0
-    favourite_counts=[]
-    places_of_tweets={}
+    counted_text_only = 0
+    counted_image_only = 0
+    counted_text_image_both = 0
+    favourite_counts = []
+    places_of_tweets = {}
     for tweet in tweets:
         favourite_counts.append(tweet.get("favorite_count"))
-        if (tweet.__contains__("retweeted_status")):
+        if tweet.__contains__("retweeted_status"):
             counted_retweeted = counted_retweeted + 1
         else:
             counted_original += 1
-        if tweet['place']!=None:
-            tweet_place_full_name=tweet['place']['full_name']
+        if tweet['place'] != None:
+            tweet_place_full_name = tweet['place']['full_name']
             if places_of_tweets.__contains__(tweet_place_full_name):
-                places_of_tweets[tweet_place_full_name]+=1
+                places_of_tweets[tweet_place_full_name] += 1
             else:
-                places_of_tweets[tweet_place_full_name]=1
-    print(places_of_tweets)
+                places_of_tweets[tweet_place_full_name] = 1
+        if (tweet.__contains__("text")):
+            if (len(tweet['text']) != 0):
+                if (tweet['entities'].__contains__('media')):
+                    counted_text_image_both += 1
+                else:
+                    counted_text_only += 1
+            else:
+                counted_image_only += 1
+        else:
+            if (tweet['entities'].__contains__('media')):
+                counted_image_only += 1
+    print(counted_image_only)
+    print(counted_text_only)
+    print(counted_text_image_both)
+    text_only_percent = ((counted_text_only) /( counted_text_image_both + counted_text_only + counted_image_only) )* 100
+    image_only_percent = ((counted_image_only) / (counted_text_image_both + counted_text_only + counted_image_only) )* 100
+    text_image_both_percent = ((
+                               counted_text_image_both) / (counted_text_image_both + counted_text_only + counted_image_only)) * 100
     original_tweet_percent = (counted_original / (counted_original + counted_retweeted)) * 100
     retweeted_tweet_percent = (counted_retweeted / (counted_original + counted_retweeted)) * 100
     # print(favourite_counts)
@@ -36,7 +56,9 @@ def hello_world():
     # plt.show()
     return render_template("USelections.html", hashtags=top10_hashtags_in_election(),
                            original_tweet_percent=original_tweet_percent,
-                           retweeted_tweet_percent=retweeted_tweet_percent,places_of_tweets=places_of_tweets)
+                           retweeted_tweet_percent=retweeted_tweet_percent, places_of_tweets=places_of_tweets,
+                           text_only_percent=text_only_percent, text_image_both_percent=text_image_both_percent,
+                           image_only_percent=image_only_percent,counted_image_only=counted_image_only,counted_text_image_both=counted_text_image_both,counted_text_only=counted_text_only,counted_original=counted_original,counted_retweeted=counted_retweeted)
 
 
 def top10_hashtags_in_election():
