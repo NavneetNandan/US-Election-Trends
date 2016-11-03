@@ -10,7 +10,7 @@
 
       function drawMarkersMap() {
       var data = google.visualization.arrayToDataTable([
-        ['City',   'Value'],
+        ['City',   'Tweets'],
         {% for place_of_tweet in places_of_tweets %}
             ['{{ place_of_tweet }}',{{ places_of_tweets[place_of_tweet] }}],
         {% endfor %}
@@ -38,8 +38,8 @@
 
         var data1 = google.visualization.arrayToDataTable([
           ['Type of Tweet', 'Count'],
-          ['Original Tweet',     {{ counted_original }}],
-          ['Retweeted Tweet',      {{ counted_retweeted }}],
+          ['Original Tweets',     {{ counted_original }}],
+          ['Retweeted Tweets',      {{ counted_retweeted }}],
         ]);
 
         var options = {
@@ -58,7 +58,7 @@
     };
     </script>
 </head>
-<body>
+<body style="font-family: Calibri">
     <h2>Top 10 #hashtags of US elections</h2>
     <ol>
         {% for hashtag in hashtags %}
@@ -67,8 +67,8 @@
     </ol>
 {#    <h4>Percent of original tweet is {{ original_tweet_percent }}%</h4>#}
 {#    <h4>Percent of retweeted tweet is {{ retweeted_tweet_percent }}%</h4>#}
-    <div id="piechart" style="width: 900px; height: 500px;"></div>
-    <div id="piechart_two" style="width: 900px; height: 500px;"></div>
+    <div id="piechart" style="width: 50%; height: 500px; float: left; display: flex " ></div>
+    <div id="piechart_two" style="width: 50%; height: 500px; float: right; display: flex" ></div>
 {#    <h4>Percent of text only tweet is {{ text_only_percent }}%</h4>#}
 {#    <h4>Percent of image only tweet is {{ image_only_percent }}%</h4>#}
 {#    <h4>Percent of text and image both tweet is {{ text_image_both_percent }}%</h4>#}
