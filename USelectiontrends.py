@@ -5,11 +5,11 @@ import pandas as pd
 app = Flask(__name__)
 app.debug = True
 DATABASE_NAME = 'uselectiontrends'
-
+uri="mongodb://navneet8:cricket00@ds019470.mlab.com:19470/uselectiontrends"
 
 @app.route('/')
 def create_page():
-    client = MongoClient()
+    client = MongoClient(uri)
     db = client[DATABASE_NAME]
     tweets = db['tweets'].find()  # getting all tweets from mongoDB database
     counted_retweeted = 0
