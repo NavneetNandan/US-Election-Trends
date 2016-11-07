@@ -7,12 +7,12 @@ app.debug = True
 DATABASE_NAME = 'uselectiontrends'
 
 
-# uri="mongodb://navneet8:cricket00@ds019470.mlab.com:19470/uselectiontrends"
+uri="mongodb://navneet8:cricket00@ds019470.mlab.com:19470/uselectiontrends"
 
 @app.route('/')
 def create_page():
-    # client = MongoClient(uri)
-    client = MongoClient()
+    client = MongoClient(uri)
+    # client = MongoClient()
     db = client[DATABASE_NAME]
     tweets = db['tweets'].find()  # getting all tweets from mongoDB database
     counted_retweeted = 0
