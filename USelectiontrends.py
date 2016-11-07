@@ -5,11 +5,14 @@ import pandas as pd
 app = Flask(__name__)
 app.debug = True
 DATABASE_NAME = 'uselectiontrends'
-uri="mongodb://navneet8:cricket00@ds019470.mlab.com:19470/uselectiontrends"
+
+
+# uri="mongodb://navneet8:cricket00@ds019470.mlab.com:19470/uselectiontrends"
 
 @app.route('/')
 def create_page():
-    client = MongoClient(uri)
+    # client = MongoClient(uri)
+    client = MongoClient()
     db = client[DATABASE_NAME]
     tweets = db['tweets'].find()  # getting all tweets from mongoDB database
     counted_retweeted = 0
@@ -20,6 +23,7 @@ def create_page():
     favourite_counts = []
     places_of_tweets = {}
     all_hashtags_map = {}
+    total_tweet = db.tweets.count()
     for tweet in tweets:
         favourite_counts.append(tweet.get("favorite_count"))
         # finding hashtags associated with each tweet
@@ -70,7 +74,8 @@ def create_page():
                            counted_text_image_both=counted_text_image_both,
                            counted_text_only=counted_text_only,
                            counted_original=counted_original,
-                           counted_retweeted=counted_retweeted)
+                           counted_retweeted=counted_retweeted,
+                           total_tweets=total_tweet)
 
 
 if __name__ == '__main__':

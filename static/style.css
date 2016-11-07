@@ -1,0 +1,25 @@
+.counter_keywords{
+    width: 49.5%;
+    float: right;
+    text-align: center;
+}
+.hashtag{
+    width: 50%;
+    float: left;
+}
+.card{
+    padding: 10px;
+    font-size: large;
+}
+
+.tags{
+    color: #1DA1F2;
+    font-size: larger;
+}
+.tweet_keywords{
+    color: #1DA1F2;
+    font-size: x-large;
+}
+body{
+    padding: 10px;
+}

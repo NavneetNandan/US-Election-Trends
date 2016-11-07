@@ -3,77 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <title>US Election Trends</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+    <link rel="stylesheet" href="../static/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+
     <script type='text/javascript' src='../static/loader.js'></script>
     <script type='text/javascript'>
-     google.charts.load('upcoming', {'packages': ['geochart']});
-     google.charts.setOnLoadCallback(drawMarkersMap);
+        google.charts.load('upcoming', {'packages': ['geochart']});
+        google.charts.setOnLoadCallback(drawMarkersMap);
 
-      function drawMarkersMap() {
-      var data = google.visualization.arrayToDataTable([
-        ['City',   'Tweets'],
-        {% for place_of_tweet in places_of_tweets %}
-            ['{{ place_of_tweet }}',{{ places_of_tweets[place_of_tweet] }}],
-        {% endfor %}
-      ]);
+        function drawMarkersMap() {
+            var data = google.visualization.arrayToDataTable([
+                ['City', 'Tweets'],
+                {% for place_of_tweet in places_of_tweets %}
+                    ['{{ place_of_tweet }}', {{ places_of_tweets[place_of_tweet] }}],
+                {% endfor %}
+            ]);
 
-      var options = {
-        displayMode: 'markers',
-        colorAxis: {colors: ['blue', 'red']}
-      };
+            var options = {
+                displayMode: 'markers',
+                colorAxis: {colors: ['blue', 'red']}
+            };
 
-      var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
-      chart.draw(data, options);
+            var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
 
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
-      function drawChart() {
+            google.charts.load('current', {'packages': ['corechart']});
+            google.charts.setOnLoadCallback(drawChart);
+            function drawChart() {
 
-        var data = google.visualization.arrayToDataTable([
-          ['Type', 'Count'],
-          ['Text Only Tweets',     {{ counted_text_only }}],
-          ['Image Only Tweets',     {{ counted_image_only }}],
-          ['Text+Image Tweets',  {{ counted_text_image_both }}],
+                var data = google.visualization.arrayToDataTable([
+                    ['Type', 'Count'],
+                    ['Text Only', {{ counted_text_only }}],
+                    ['Image Only', {{ counted_image_only }}],
+                    ['Text+Image', {{ counted_text_image_both }}],
 
-        ]);
+                ]);
 
-        var data1 = google.visualization.arrayToDataTable([
-          ['Type of Tweet', 'Count'],
-          ['Original Tweets',     {{ counted_original }}],
-          ['Retweeted Tweets',      {{ counted_retweeted }}],
-        ]);
+                var data1 = google.visualization.arrayToDataTable([
+                    ['Type of Tweet', 'Count'],
+                    ['Original Tweets', {{ counted_original }}],
+                    ['Retweeted Tweets', {{ counted_retweeted }}],
+                ]);
 
-        var options = {
-          title: 'Distribution of Type of Tweet i.e. Text, Image, Text+Image'
-        };
+                var options = {
+                    title: 'Distribution of Type of Tweet',
+                    titleTextStyle:{
+                        fontName: "Roboto",
+                        fontSize: 24,
+                        bold: false
+                    }
 
-        var options1 = {
-          title: 'Distribution of Original Tweets vs Retweeted Tweets'
-        };
-        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-        var chart1 = new google.visualization.PieChart(document.getElementById('piechart_two'));
+                };
 
-        chart.draw(data, options);
-        chart1.draw(data1,options1)
-      }
-    };
+                var options1 = {
+                    title: 'Distribution of Original vs Retweeted Tweets',
+                    titleTextStyle:{
+                        fontName: "Roboto",
+                        fontSize: 24,
+                        bold: false
+                    }
+
+                };
+                var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                var chart1 = new google.visualization.PieChart(document.getElementById('piechart_two'));
+
+                chart.draw(data, options);
+                chart1.draw(data1, options1)
+            }
+        }
+        ;
     </script>
 </head>
-<body style="font-family: Calibri">
-    <h2>Top 10 #hashtags of US elections</h2>
-    <ol>
-        {% for hashtag in hashtags %}
-            <li>{{ hashtag }}</li>
-        {% endfor %}
-    </ol>
+<body>
+<h1> US Election Trends</h1>
+<div class="card">
+    <h4>Location of tweets related to US Elections</h4>
+
+    <div id="chart_div" ></div>
+</div>
+
+<div id="piechart" style="width: 50%; height: 500px; float: left; display: flex "></div>
+
+<div id="piechart_two" style="width: 50%; height: 500px; float: right; display: flex"></div>
+
+<div class="row">
+    <div class="card hashtag ">
+        <h4>Top 10 #hashtags of US elections</h4>
+        <ol>
+            {% for hashtag in hashtags %}
+                <li>
+                    <div class="tags">#{{ hashtag }}</div>
+                </li>
+            {% endfor %}
+        </ol>
+    </div>
+    <div class="counter_keywords">
+        <div class="counter card">
+            Total tweets analysed are
+            <h5 class="tweet_counter" align="center">{{ total_tweets }}</h5>
+
+        </div>
+        <div class="keywords card">
+            Keywords used for filtering tweets are
+            <div class="tweet_keywords"> #USelections #trump #clinton</div>
+        </div>
+    </div>
+</div>
 {#    <h4>Percent of original tweet is {{ original_tweet_percent }}%</h4>#}
 {#    <h4>Percent of retweeted tweet is {{ retweeted_tweet_percent }}%</h4>#}
-    <div id="piechart" style="width: 50%; height: 500px; float: left; display: flex " ></div>
-    <div id="piechart_two" style="width: 50%; height: 500px; float: right; display: flex" ></div>
+
 {#    <h4>Percent of text only tweet is {{ text_only_percent }}%</h4>#}
 {#    <h4>Percent of image only tweet is {{ image_only_percent }}%</h4>#}
 {#    <h4>Percent of text and image both tweet is {{ text_image_both_percent }}%</h4>#}
-
-    <h2>Location of tweets related to USelections</h2>
-    <div id="chart_div" style="width: 900px; height: 500px;"></div>
 </body>
 </html>
