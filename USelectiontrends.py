@@ -83,10 +83,6 @@ def create_page():
         all_hashtags_map)  # storing all hashtag dictionary in pandas series for optimised analysis
     all_hashtags_pandas_series.sort_values(inplace=True, ascending=False)  # sorting series descending order
     top10_hashtags = all_hashtags_pandas_series[0:10].keys()  # getting top 10 hashtag
-    print("cln")
-    print(clinton_score)
-    print("trm")
-    print(trump_score)
     return render_template("USelections.html",
                            hashtags=top10_hashtags,
                            places_of_tweets=places_of_tweets,
