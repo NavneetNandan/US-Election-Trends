@@ -11,7 +11,6 @@
     <script type='text/javascript'>
         google.charts.load('upcoming', {'packages': ['geochart']});
         google.charts.setOnLoadCallback(drawMarkersMap);
-
         function drawMarkersMap() {
             var data = google.visualization.arrayToDataTable([
                 ['City', 'Tweets'],
@@ -69,11 +68,36 @@
                 var chart1 = new google.visualization.PieChart(document.getElementById('piechart_two'));
 
                 chart.draw(data, options);
-                chart1.draw(data1, options1)
+                chart1.draw(data1, options1);
+                google.charts.load('current', {packages: ['corechart', 'bar']});
+google.charts.setOnLoadCallback(drawMaterial);
+
+function drawMaterial() {
+{#      var data = new google.visualization.DataTable();#}
+{#      data.addColumn('number', 'Donald Trump');#}
+{#      data.addColumn('number', 'Hillary Clinton');#}
+{##}
+{#      data.addRows([#}
+{#        [ , ],#}
+{#      ]);#}
+    var data = google.visualization.arrayToDataTable([
+        ['Candidate', 'Score', { role: 'style' } ],
+        ['Donald Trump', {{trump_score}}, 'color: red'],
+        ['Hillary Clinton', {{ clinton_score }}, 'color: blue'],
+        ])
+      var options = {
+        title: 'Popularity of Trump vs Clinton',
+      };
+
+      var material = new google.charts.Bar(document.getElementById('chart_div1'));
+      material.draw(data, options);
+    }
             }
         }
         ;
+
     </script>
+
 </head>
 <body>
 <h1> US Election Trends</h1>
@@ -97,17 +121,21 @@
                 </li>
             {% endfor %}
         </ol>
+    <div class="keywords card">
+            Keywords used for filtering tweets are
+            <div class="tweet_keywords"> #USelections #trump #clinton</div>
+        </div>
     </div>
     <div class="counter_keywords">
+        <div class="compare"><h4>Comparison of popularity on the basis of score of 0-10</h4>
+<div id="chart_div1"></div>
+        Metric of comparison: Every retweet of tweet by candidates give 10 point, each user mention give 4 points and each hashtag related to them give 2 point. Then summation of these points are scaled to 10 for each candidate. </div>
         <div class="counter card">
             Total tweets analysed are
             <h5 class="tweet_counter" align="center">{{ total_tweets }}</h5>
 
         </div>
-        <div class="keywords card">
-            Keywords used for filtering tweets are
-            <div class="tweet_keywords"> #USelections #trump #clinton</div>
-        </div>
+
     </div>
 </div>
 {#    <h4>Percent of original tweet is {{ original_tweet_percent }}%</h4>#}
