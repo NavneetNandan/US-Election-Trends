@@ -1,4 +1,0 @@
-consumer_key = 'A4eadebT8tGsCdEi2PSWujN14'
-consumer_secret = 'qaEHtCxwBItMy9FOSBH5lnPr9uGG2gwE66apoclhHY1TPGEU53'
-access_token = '201611076-9StnLCy3QRCUXj1cTyQz0zRu4XknVSrXueSNbi32'
-access_secret = '09FL8LqzQIrdx7jYxb3G53lfKEQ2EUCUGGG92niJy4QGT'
