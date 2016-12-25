@@ -1,13 +1,14 @@
 from flask import Flask, render_template
 from pymongo import MongoClient
 import pandas as pd
+import os
 
 app = Flask(__name__)
 app.debug = True
 DATABASE_NAME = 'uselectiontrends'
 
 
-uri="mongodb://navneet8:cricket00@ds019470.mlab.com:19470/uselectiontrends"
+uri="mongodb://navneet8:"+os.environ['PASSWORD']+"@ds019470.mlab.com:19470/uselectiontrends"
 
 @app.route('/')
 def create_page():
