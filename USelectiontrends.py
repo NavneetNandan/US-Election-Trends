@@ -1,21 +1,20 @@
 from flask import Flask, render_template
 from pymongo import MongoClient
 import pandas as pd
-import os
+import json
 
 app = Flask(__name__)
 app.debug = True
 DATABASE_NAME = 'uselectiontrends'
 
 
-uri="mongodb://navneet8:"+os.environ['PASSWORD']+"@ds019470.mlab.com:19470/uselectiontrends"
+
 
 @app.route('/')
 def create_page():
-    client = MongoClient(uri)
-    # client = MongoClient()
-    db = client[DATABASE_NAME]
-    tweets = db['tweets'].find()  # getting all tweets from mongoDB database
+    tweets = []
+    with open('/home/navneet8/precogsummer17_NavneetNandan/tweets.json','r') as tweets_file:
+       tweets=json.loads(tweets_file.read())
     counted_retweeted = 0
     counted_original = 0
     counted_text_only = 0
@@ -26,7 +25,7 @@ def create_page():
     all_hashtags_map = {}
     trump_score=0
     clinton_score=0
-    total_tweet = db.tweets.count()
+    total_tweet = len(tweets)
     for tweet in tweets:
         favourite_counts.append(tweet.get("favorite_count"))
         # finding hashtags associated with each tweet
